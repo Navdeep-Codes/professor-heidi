@@ -1,48 +1,25 @@
-const COURSE_ID = '<course id>';
-const WEBHOOK_URL = '<web hook url>';
-function checkAnnouncements() {
+const COURSE_ID = '753920959611';
+const WEBHOOK_URL = 'https://professor-heidi.navdeep.hackclub.app/announcement';
+const API_KEY = 'Navdeep-Hates-School-Work'
+
+ function checkAnnouncements() {
   try {
     const props = PropertiesService.getScriptProperties();
     const lastId = props.getProperty('lastAnnouncementId');
-
     const announcements = Classroom.Courses.Announcements.list(COURSE_ID, { pageSize: 1 });
     const latest = announcements.announcements && announcements.announcements[0];
 
-    if (!latest) return;
+    if (!latest) return; 
 
     const latestId = latest.id;
 
     if (latestId !== lastId) {
       const text = latest.text || "(no text)";
       const created = latest.creationTime;
-      const authorId = latest.creatorUserId;
-
-      let authorName = "Unknown Author";
-      try {
-        const user = Classroom.UserProfiles.get(authorId);
-        authorName = user.name.fullName || authorName;
-      } catch (err) {
-        Logger.log("Author fetch failed: " + err);
-      }
-
-      let attachments = [];
-      if (latest.materials && latest.materials.length > 0) {
-        latest.materials.forEach(m => {
-          if (m.driveFile && m.driveFile.driveFile && m.driveFile.driveFile.alternateLink) {
-            attachments.push(m.driveFile.driveFile.alternateLink);
-          } else if (m.link && m.link.url) {
-            attachments.push(m.link.url);
-          } else if (m.youtubeVideo && m.youtubeVideo.alternateLink) {
-            attachments.push(m.youtubeVideo.alternateLink);
-          }
-        });
-      }
 
       const payload = {
-        text: text,
-        date: created,
-        author: authorName,
-        attachments: attachments
+        test: text,
+        date: created
       };
 
       UrlFetchApp.fetch(WEBHOOK_URL, {
@@ -63,19 +40,20 @@ function checkAnnouncements() {
     }
 
   } catch (err) {
-    Logger.log("Error bruh: " + err);
+    Logger.log("Eror bruh " + err);
   }
 }
 
 function doGet() {
-  return HtmlService.createHtmlOutput("<h2>Professor Heidi on duty!</h2>");
+  return HtmlService.createHtmlOutput("<h2> Professor Heidi on duty! </h2>");
 }
-
 function setupTrigger() {
+  ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t));
+
   ScriptApp.newTrigger('checkAnnouncements')
     .timeBased()
-    .everyMinutes(1)
+    .everyMinutes()
     .create();
 
-  Logger.log("Trigger created to run every 1 minute.");
+  Logger.log("Trigger done");
 }

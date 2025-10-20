@@ -6,7 +6,7 @@ const bot = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 
-async function postAnnouncement(text, date, author, attachments) {
+async function postAnnouncement(text, date) {
   const blocks = [
     {
       type: "header",
@@ -23,10 +23,6 @@ async function postAnnouncement(text, date, author, attachments) {
           type: "mrkdwn",
           text: `*Date:*\n${date}`
         },
-        ...(author ? [{
-          type: "mrkdwn",
-          text: `*Author:*\n${author}`
-        }] : [])
       ]
     },
     {
@@ -38,15 +34,6 @@ async function postAnnouncement(text, date, author, attachments) {
     }
   ];
 
-  if (attachments && attachments.length > 0) {
-    blocks.push({
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `*Attachments:*\n${attachments.map(a => `• ${a}`).join('\n')}`
-      }
-    });
-  }
 
   blocks.push({ type: "divider" });
 

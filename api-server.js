@@ -15,7 +15,7 @@ app.post('/announcement', async (req, res) => {
     return res.status(401).json({ error: 'Unauthorized: Invalid auth key' });
   }
 
-  const { text, date, author, attachments } = req.body;
+  const { text, date } = req.body;
 
   if (!text || !date) {
     return res.status(400).json({ error: 'Missing required fields: text and date' });
@@ -24,15 +24,12 @@ app.post('/announcement', async (req, res) => {
   console.log('Received announcement:');
   console.log('Text:', text);
   console.log('Date:', date);
-  console.log('Author:', author);
-  console.log('Attachments:', attachments);
-
   try {
-    await postAnnouncement(text, date, author, attachments);
+    await postAnnouncement(text, date);
     res.status(200).json({ 
       success: true, 
       message: 'Announcement received and sent to Slack',
-      data: { text, date, author, attachments }
+      data: { text, date}
     });
   } catch (error) {
     res.status(500).json({
