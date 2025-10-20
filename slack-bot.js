@@ -12,7 +12,7 @@ async function postAnnouncement(text, date) {
       type: "header",
       text: {
         type: "plain_text",
-        text: "New Announcement :siren-real:",
+        text: "New GCR Announcement :siren-real:",
         emoji: true
       }
     },
@@ -21,7 +21,7 @@ async function postAnnouncement(text, date) {
       fields: [
         {
           type: "mrkdwn",
-          text: `*Date:*\n${date}`
+          text: `*Date:* ${date}`
         },
       ]
     },
