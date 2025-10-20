@@ -9,6 +9,7 @@ const AUTH_KEY = process.env.AUTH_KEY;
 app.use(express.json());
 
 app.post('/announcement', async (req, res) => {
+  console.log("recieved annoucement");
   const authHeader = req.headers.authorization;
   
   if (!authHeader || authHeader !== `Bearer ${AUTH_KEY}`) {
